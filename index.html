@@ -11,181 +11,187 @@
            padding: 0;
            box-sizing: border-box;
        }
-```
-   body {
-       font-family: Arial, sans-serif;
-       background-color: #f5f5f5;
-   }
-   .input-section {
-       background: white;
-       padding: 20px;
-       margin: 20px;
-       border-radius: 8px;
-       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-       max-width: 500px;
-   }
-   .form-group {
-       margin-bottom: 15px;
-   }
-   .form-group label {
-       display: block;
-       margin-bottom: 5px;
-       font-weight: bold;
-   }
-   .form-group input, .form-group select {
-       width: 100%;
-       padding: 8px;
-       border: 1px solid #ddd;
-       border-radius: 4px;
-   }
-   button {
-       background-color: #007bff;
-       color: white;
-       padding: 10px 20px;
-       border: none;
-       border-radius: 4px;
-       cursor: pointer;
-       margin-right: 10px;
-       margin-bottom: 5px;
-   }
-   button:hover {
-       background-color: #0056b3;
-   }
-   /* Print Area - A4 Size */
-   .print-area {
-       width: 210mm;
-       height: 297mm;
-       background: white;
-       margin: 20px auto;
-       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-   }
-   /* Each label takes 1/3 of A4 height */
-   .label {
-       width: 210mm;
-       height: 99mm;
-       border-bottom: 1px dashed #ccc;
-       padding: 8mm;
-       display: flex;
-       flex-direction: column;
-       justify-content: space-between;
-   }
-   .label:last-child {
-       border-bottom: none;
-   }
-   /* Label ID centered at top */
-   .label-header {
-       text-align: center;
-       margin-bottom: 5mm;
-   }
-   .label-id {
-       font-size: 18px;
-       font-weight: bold;
-       letter-spacing: 1px;
-   }
-   /* Main row with QR - Info - QR (space-between) */
-   .main-row {
-       display: flex;
-       justify-content: space-arround;
-       align-items: center;
-       margin-bottom: 5mm;
-   }
-   .qr-container {
-       width: 40mm;
-       height: 40mm;
-       border: 2px solid #000;
-       display: flex;
-       align-items: center;
-       justify-content: center;
-       background: white;
-   }
-   .qr-container img {
-       max-width: 100%;
-       max-height: 100%;
-   }
-   /* Center info */
-   .center-info {
-       text-align: left;
-       font-size: 14px;
-   }
-   .info-line {
-       margin-bottom: 2mm;
-   }
-   .info-label {
-       font-weight: bold;
-       display: inline-block;
-       min-width: 35mm;
-   }
-   /* Bottom row with TRADER, GRADE, KODE RECLASS (space-between) */
-   .bottom-row {
-       display: flex;
-       justify-content: space-arround;
-       align-items: center;
-       font-size: 14px;
-       margin-bottom: 5mm;
-   }
-   .bottom-item {
-       display: flex;
-       align-items: center;
-   }
-   .bottom-item .info-label {
-       font-weight: bold;
-       margin-right: 3mm;
-       min-width: auto;
-   }
-   /* Footer with checkboxes and labels (space-between) */
-   .footer-row {
-       display: flex;
-       justify-content: space-arround;
-       align-items: center;
-       font-size: 14px;
-       border-top: 1px solid #ccc;
-       padding-top: 3mm;
-   }
-   .checkbox-item {
-       display: flex;
-       align-items: center;
-   }
-   .checkbox {
-       width: 5mm;
-       height: 5mm;
-       border: 2px solid #000;
-       margin-right: 2mm;
-       background: white;
-   }
-   .checkbox-label {
-       font-weight: bold;
-   }
-   @media print {
        body {
-           background: white;
-           margin: 0;
+           font-family: Arial, sans-serif;
+           background-color: #f5f5f5;
        }
        .input-section {
-           display: none;
+           background: white;
+           padding: 20px;
+           margin: 20px;
+           border-radius: 8px;
+           box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+           max-width: 500px;
        }
+       .form-group {
+           margin-bottom: 15px;
+       }
+       .form-group label {
+           display: block;
+           margin-bottom: 5px;
+           font-weight: bold;
+       }
+       .form-group input, .form-group select {
+           width: 100%;
+           padding: 8px;
+           border: 1px solid #ddd;
+           border-radius: 4px;
+       }
+       button {
+           background-color: #007bff;
+           color: white;
+           padding: 10px 20px;
+           border: none;
+           border-radius: 4px;
+           cursor: pointer;
+           margin-right: 10px;
+           margin-bottom: 5px;
+       }
+       button:hover {
+           background-color: #0056b3;
+       }
+       /* Print Area - A4 Size */
        .print-area {
-           margin: 0;
-           box-shadow: none;
+           width: 210mm;
+           height: 297mm;
+           background: white;
+           margin: 20px auto;
+           box-shadow: 0 0 10px rgba(0,0,0,0.1);
        }
+       /* Each label takes 1/3 of A4 height */
        .label {
-           border-bottom: 1px solid #000;
-           page-break-inside: avoid;
+           width: 210mm;
+           height: 99mm;
+           border-bottom: 1px dashed #ccc;
+           padding: 10mm;
+           display: flex;
+           flex-direction: column;
+           justify-content: space-between;
        }
        .label:last-child {
            border-bottom: none;
        }
-   }
-   @page {
-       size: A4;
-       margin: 0;
-   }
+       /* Label ID centered at top */
+       .label-header {
+           text-align: center;
+           margin-bottom: 5mm;
+       }
+       .label-id {
+           font-size: 24px;
+           font-weight: bold;
+           letter-spacing: 2px;
+       }
+       /* Main row with QR - Info - QR */
+       .main-row {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           margin-bottom: 5mm;
+       }
+       .qr-container {
+           width: 40mm;
+           height: 40mm;
+           border: 2px solid #000;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           background: white;
+       }
+       .qr-container img {
+           width: 35mm;
+           height: 35mm;
+       }
+       /* Center info */
+       .center-info {
+           text-align: left;
+           font-size: 14px;
+       }
+       .info-line {
+           margin-bottom: 3mm;
+       }
+       .info-label {
+           font-weight: bold;
+           display: inline-block;
+           min-width: 40mm;
+           font-size: 14px;
+       }
+       .info-value {
+           font-weight: normal;
+           font-size: 14px;
+       }
+       /* Bottom row with TRADER, GRADE, KODE RECLASS */
+       .bottom-row {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           font-size: 14px;
+           margin-bottom: 5mm;
+       }
+       .bottom-item {
+           display: flex;
+           align-items: center;
+       }
+       .bottom-item .info-label {
+           font-weight: bold;
+           margin-right: 3mm;
+           min-width: auto;
+       }
+       .bottom-item .info-value {
+           font-weight: normal;
+       }
+       /* Footer with checkboxes and labels */
+       .footer-row {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           font-size: 14px;
+           border-top: 1px solid #000;
+           padding-top: 3mm;
+       }
+       .checkbox-item {
+           display: flex;
+           align-items: center;
+       }
+       .checkbox {
+           width: 6mm;
+           height: 6mm;
+           border: 2px solid #000;
+           margin-right: 2mm;
+           background: white;
+       }
+       .checkbox-label {
+           font-weight: bold;
+           font-size: 14px;
+       }
+       @media print {
+           body {
+               background: white;
+               margin: 0;
+           }
+           .input-section {
+               display: none;
+           }
+           .print-area {
+               margin: 0;
+               box-shadow: none;
+           }
+           .label {
+               border-bottom: 1px solid #000;
+               page-break-inside: avoid;
+           }
+           .label:last-child {
+               border-bottom: none;
+           }
+       }
+       @page {
+           size: A4;
+           margin: 0;
+       }
 </style>
-```
 </head>
 <body>
 <div class="input-section">
 <h2>Generator Label QR Code</h2>
-```
 <div class="form-group">
 <label for="labelId">Label ID:</label>
 <input type="text" id="labelId" placeholder="Contoh: 25-TVLB-REC---CDKL---000001" value="25-TVLB-REC---CDKL---000001">
@@ -193,7 +199,7 @@
 <div class="form-group">
 <label for="kodeReclass">Kode Reclass:</label>
 <select id="kodeReclass">
-<option value="-">- (Tidak ada)</option>
+<option value="-">-</option>
 <option value="MS">MS</option>
 </select>
 </div>
@@ -202,85 +208,94 @@
 <button onclick="downloadPDF()">Download PDF</button>
 </div>
 <div class="print-area" id="printArea">
-<!-- Labels akan di-generate di sini -->
+<!-- Labels will be generated here -->
 </div>
 <script>
-   function parseLabel(labelId) {
-       // Parse format: 25-TVLB-REC---CDKL---000001
-       const parts = labelId.split('-');
-       return {
-           tahun: parts[0] || '',
-           origin: parts[1] || '',
-           kode: parts[2] || '',
-           grade: parts[4] || '',
-           runningNumber: parts[6] || ''
-       };
-   }
-   function generateQRUrl(text) {
-       return `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(text)}&size=150x150`;
-   }
-   function generateLabels() {
-       const labelId = document.getElementById('labelId').value.trim();
-       const kodeReclass = document.getElementById('kodeReclass').value;
-       if (!labelId) {
-           alert('Mohon masukkan Label ID');
-           return;
+       function parseLabel(labelId) {
+           // Split by '---' first
+           const mainParts = labelId.split('---');
+           if (mainParts.length !== 3) {
+               throw new Error('Invalid Label ID format');
+           }
+           // Split the first part by '-' for tahun, origin, kode
+           const firstParts = mainParts[0].split('-');
+           return {
+               tahun: firstParts[0] || '',
+               origin: firstParts[1] || '',
+               kode: firstParts[2] || '',
+               grade: mainParts[1] || '', // Middle part after splitting by ---
+               runningNumber: parseInt(mainParts[2], 10) || 0 // Last part converted to number
+           };
        }
-       const parsedLabel = parseLabel(labelId);
-       const printArea = document.getElementById('printArea');
-       const qrUrl = generateQRUrl(labelId);
-       // Generate 3 label yang sama
-       let html = '';
-       for (let i = 0; i < 3; i++) {
-           html += `
+       function generateQRUrl(text) {
+           return `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(text)}&size=150x150`;
+       }
+       function generateLabels() {
+           const labelId = document.getElementById('labelId').value.trim();
+           const kodeReclass = document.getElementById('kodeReclass').value;
+           if (!labelId) {
+               alert('Mohon masukkan Label ID');
+               return;
+           }
+           try {
+               const parsedLabel = parseLabel(labelId);
+               const printArea = document.getElementById('printArea');
+               const qrUrl = generateQRUrl(labelId);
+               // Generate 3 identical labels
+               let html = '';
+               for (let i = 0; i < 3; i++) {
+                   const runningNumberStr = String(parsedLabel.runningNumber + i).padStart(6, '0');
+                   const currentLabelId = `${parsedLabel.tahun}-${parsedLabel.origin}-${parsedLabel.kode}---${parsedLabel.grade}---${runningNumberStr}`;
+                   const currentQrUrl = generateQRUrl(currentLabelId);
+                   html += `
 <div class="label">
 <!-- Label ID centered -->
 <div class="label-header">
-<div class="label-id">${labelId}</div>
+<div class="label-id">${currentLabelId}</div>
 </div>
-<!-- Main row: QR - Info - QR (space-between) -->
+<!-- Main row: QR - Info - QR -->
 <div class="main-row">
 <div class="qr-container">
-<img src="${qrUrl}" alt="QR Code">
+<img src="${currentQrUrl}" alt="QR Code">
 </div>
 <div class="center-info">
 <div class="info-line">
 <span class="info-label">TAHUN :</span>
-<span>${parsedLabel.tahun}</span>
+<span class="info-value">${parsedLabel.tahun}</span>
 </div>
 <div class="info-line">
 <span class="info-label">ORIGIN :</span>
-<span>${parsedLabel.origin}</span>
+<span class="info-value">${parsedLabel.origin}</span>
 </div>
 <div class="info-line">
 <span class="info-label">KODE :</span>
-<span>${parsedLabel.kode}</span>
+<span class="info-value">${parsedLabel.kode}</span>
 </div>
 <div class="info-line">
 <span class="info-label">RUNNING NUMBER :</span>
-<span>${parsedLabel.runningNumber}</span>
+<span class="info-value">${runningNumberStr}</span>
 </div>
 </div>
 <div class="qr-container">
-<img src="${qrUrl}" alt="QR Code">
+<img src="${currentQrUrl}" alt="QR Code">
 </div>
 </div>
-<!-- Bottom row: TRADER, GRADE, KODE RECLASS (space-between) -->
+<!-- Bottom row: TRADER, GRADE, KODE RECLASS -->
 <div class="bottom-row">
 <div class="bottom-item">
 <span class="info-label">TRADER :</span>
-<span>-</span>
+<span class="info-value">-</span>
 </div>
 <div class="bottom-item">
 <span class="info-label">GRADE :</span>
-<span>${parsedLabel.grade}</span>
+<span class="info-value">${parsedLabel.grade}</span>
 </div>
 <div class="bottom-item">
 <span class="info-label">KODE RECLASS :</span>
-<span>${kodeReclass}</span>
+<span class="info-value">${kodeReclass}</span>
 </div>
 </div>
-<!-- Footer: Checkboxes with APPSHEET, SPG, CHECK (space-between) -->
+<!-- Footer: Checkboxes with APPSHEET, SPG, CHECK -->
 <div class="footer-row">
 <div class="checkbox-item">
 <div class="checkbox"></div>
@@ -296,46 +311,48 @@
 </div>
 </div>
 </div>
-           `;
-       }
-       printArea.innerHTML = html;
-   }
-   function printLabels() {
-       const printArea = document.getElementById('printArea');
-       if (!printArea.innerHTML.trim()) {
-           alert('Mohon generate label terlebih dahulu');
-           return;
-       }
-       window.print();
-   }
-   function downloadPDF() {
-       const printArea = document.getElementById('printArea');
-       if (!printArea.innerHTML.trim()) {
-           alert('Mohon generate label terlebih dahulu');
-           return;
-       }
-       const opt = {
-           margin: 0,
-           filename: 'qr-labels.pdf',
-           image: { type: 'jpeg', quality: 1.0 },
-           html2canvas: {
-               scale: 2,
-               useCORS: true,
-               backgroundColor: '#ffffff'
-           },
-           jsPDF: {
-               unit: 'mm',
-               format: 'a4',
-               orientation: 'portrait'
+                   `;
+               }
+               printArea.innerHTML = html;
+           } catch (error) {
+               alert('Format Label ID tidak valid. Gunakan format seperti: 25-TVLB-REC---CDKL---000001');
            }
-       };
-       html2pdf().set(opt).from(printArea).save();
-   }
-   // Generate label default saat halaman dimuat
-   window.addEventListener('load', function() {
-       generateLabels();
-   });
+       }
+       function printLabels() {
+           const printArea = document.getElementById('printArea');
+           if (!printArea.innerHTML.trim()) {
+               alert('Mohon generate label terlebih dahulu');
+               return;
+           }
+           window.print();
+       }
+      function downloadPDF() {
+           const printArea = document.getElementById('printArea');
+           if (!printArea.innerHTML.trim()) {
+               alert('Mohon generate label terlebih dahulu');
+               return;
+           }
+           const opt = {
+               margin: 0,
+               filename: 'qr-labels.pdf',
+               image: { type: 'jpeg', quality: 1.0 },
+               html2canvas: {
+                   scale: 2,
+                   useCORS: true,
+                   backgroundColor: '#ffffff'
+               },
+               jsPDF: {
+                   unit: 'mm',
+                   format: 'a4',
+                   orientation: 'portrait'
+               }
+           };
+           html2pdf().set(opt).from(printArea).save();
+       }
+       // Generate default labels on page load
+       window.addEventListener('load', function() {
+           generateLabels();
+       });
 </script>
-```
 </body>
 </html>

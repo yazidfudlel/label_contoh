@@ -213,7 +213,7 @@
 <h2>Generator Label QR Code</h2>
 <div class="form-group">
 <label for="labelId">Label ID:</label>
-<input type="text" id="labelId" placeholder="Contoh: 25-TVLB-REC---CDKL---000001" value="25-TVLB-REC---CDKL---000001">
+<input type="text" id="labelId" placeholder="Contoh: 25-TVLB-REC---CBL---000001">
 </div>
 <div class="form-group">
 <label for="kodeReclass">Kode Reclass:</label>
@@ -230,40 +230,53 @@
 <!-- Labels will be generated here -->
 </div>
 <script>
-       function parseLabel(labelId) {
-           // Split by '---' first
-           const mainParts = labelId.split('---');
-           if (mainParts.length !== 3) {
-               throw new Error('Invalid Label ID format');
-           }
-           // Split the first part by '-' for tahun, origin, kode
-           const firstParts = mainParts[0].split('-');
-           return {
-               tahun: firstParts[0] || '',
-               origin: firstParts[1] || '',
-               kode: firstParts[2] || '',
-               grade: mainParts[1] || '', // Middle part after splitting by ---
-               runningNumber: mainParts[2] || '' // Keep as string, no conversion
-           };
-       }
-       function generateQRUrl(text) {
-           return `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(text)}&size=120x120`; // Reduced QR size
-       }
-       function generateLabels() {
-           const labelId = document.getElementById('labelId').value.trim();
-           const kodeReclass = document.getElementById('kodeReclass').value;
-           if (!labelId) {
-               alert('Mohon masukkan Label ID');
-               return;
-           }
-           try {
-               const parsedLabel = parseLabel(labelId);
-               const printArea = document.getElementById('printArea');
-               const qrUrl = generateQRUrl(labelId);
-               // Generate 3 identical labels
-               let html = '';
-               for (let i = 0; i < 3; i++) {
-                   html += `
+function parseLabel(labelId) {
+   // Split by '---' first
+   const mainParts = labelId.split('---');
+   if (mainParts.length !== 3) {
+       throw new Error('Invalid Label ID format');
+   }
+   // Split the first part by '-' for tahun, origin, kode
+   const firstParts = mainParts[0].split('-');
+   return {
+       tahun: firstParts[0] || '',
+       origin: firstParts[1] || '',
+       kode: firstParts[2] || '',
+       grade: mainParts[1] || '', // Middle part after splitting by ---
+       runningNumber: mainParts[2] || '' // Keep as string, no conversion
+   };
+}
+function generateQRUrl(text) {
+   return `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(text)}&size=120x120`; // Reduced QR size
+}
+function getQueryParams() {
+   const params = new URLSearchParams(window.location.search);
+   return {
+       labelId: params.get('labelId') || '',
+       kodeReclass: params.get('kodeReclass') || '-'
+   };
+}
+function generateLabels() {
+   const labelIdInput = document.getElementById('labelId').value.trim();
+   const kodeReclassInput = document.getElementById('kodeReclass').value;
+   const params = getQueryParams();
+   const labelId = params.labelId || labelIdInput;
+   const kodeReclass = params.kodeReclass || kodeReclassInput;
+   if (!labelId) {
+       alert('Mohon masukkan Label ID');
+       return;
+   }
+   try {
+       const parsedLabel = parseLabel(labelId);
+       const printArea = document.getElementById('printArea');
+       const qrUrl = generateQRUrl(labelId);
+       // Set input fields to reflect URL parameters
+       document.getElementById('labelId').value = labelId;
+       document.getElementById('kodeReclass').value = kodeReclass;
+       // Generate 3 identical labels
+       let html = '';
+       for (let i = 0; i < 3; i++) {
+           html += `
 <div class="label">
 <!-- Label ID centered -->
 <div class="label-header">
@@ -331,88 +344,54 @@
 </div>
 </div>
 </div>
-                   `;
-               }
-
-             printArea.innerHTML = html;
-
-            } catch (error) {
-
-                alert('Format Label ID tidak valid. Gunakan format seperti: 25-TVLB-REC---CDKL---000001');
-
-            }
-
-        }
-
-        function printLabels() {
-
-            const printArea = document.getElementById('printArea');
-
-            if (!printArea.innerHTML.trim()) {
-
-                alert('Mohon generate label terlebih dahulu');
-
-                return;
-
-            }
-
-            window.print();
-
-        }
-
-        function downloadPDF() {
-
-            const printArea = document.getElementById('printArea');
-
-            if (!printArea.innerHTML.trim()) {
-
-                alert('Mohon generate label terlebih dahulu');
-
-                return;
-
-            }
-
-            const opt = {
-
-                margin: 0,
-
-                filename: 'qr-labels.pdf',
-
-                image: { type: 'jpeg', quality: 1.0 },
-
-                html2canvas: { 
-
-                    scale: 2, 
-
-                    useCORS: true,
-
-                    backgroundColor: '#ffffff'
-
-                },
-
-                jsPDF: { 
-
-                    unit: 'mm', 
-
-                    format: 'a4', 
-
-                    orientation: 'portrait' 
-
-                }
-
-            };
-
-            html2pdf().set(opt).from(printArea).save();
-
-        }
-
-        // Generate default labels on page load
-
-        window.addEventListener('load', function() {
-
-            generateLabels();
-
-        });
+           `;
+       }
+       printArea.innerHTML = html;
+       // If URL parameters are present, trigger print preview
+       if (params.labelId) {
+           setTimeout(() => {
+               window.print();
+           }, 1000); // Delay to ensure labels are rendered
+       }
+   } catch (error) {
+       alert('Format Label ID tidak valid. Gunakan format seperti: 25-TVLB-REC---CDKL---000001');
+   }
+}
+function printLabels() {
+   const printArea = document.getElementById('printArea');
+   if (!printArea.innerHTML.trim()) {
+       alert('Mohon generate label terlebih dahulu');
+       return;
+   }
+   window.print();
+}
+function downloadPDF() {
+   const printArea = document.getElementById('printArea');
+   if (!printArea.innerHTML.trim()) {
+       alert('Mohon generate label terlebih dahulu');
+       return;
+   }
+   const opt = {
+       margin: 0,
+       filename: 'qr-labels.pdf',
+       image: { type: 'jpeg', quality: 1.0 },
+       html2canvas: {
+           scale: 2,
+           useCORS: true,
+           backgroundColor: '#ffffff'
+       },
+       jsPDF: {
+           unit: 'mm',
+           format: 'a4',
+           orientation: 'portrait'
+       }
+   };
+   html2pdf().set(opt).from(printArea).save();
+}
+// Generate labels and handle URL parameters on page load
+window.addEventListener('load', function() {
+   generateLabels();
+});
 </script>
 </body>
 </html>

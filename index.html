@@ -82,33 +82,32 @@
            letter-spacing: 2px;
        }
        /* Main row with QR - Info - QR */
-       .main-row {
-           display: flex;
-           justify-content: space-between;
-           align-items: center;
-           margin: 0 10mm; /* Added left and right margins */
-           margin-bottom: 5mm;
-       }
-       .qr-container {
-           width: 35mm; /* Reduced from 40mm */
-           height: 35mm;
-           border: 2px solid #000;
-           display: flex;
-           align-items: center;
-           justify-content: center;
-           background: white;
-           flex: 1; /* Equal width for a and c */
-       }
-       .qr-container img {
-           width: 30mm; /* Reduced from 35mm */
-           height: 30mm;
-       }
-       /* Center info: split into b1 (right), b2 (colon), b3 (left) */
-       .center-info {
-           flex: 1; /* Equal width for b */
-           display: flex;
-           flex-direction: column;
-       }
+      .main-row {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin: 0 10mm; /* Added left and right margins */
+         margin-bottom: 5mm;
+      }
+      .qr-container {
+         width: 35mm; /* Matches QR width */
+         height: 35mm;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         background: white;
+         flex: 0 0 35mm; /* Fixed width for a and c */
+      }
+      .qr-container img {
+         width: 30mm; /* Reduced from 35mm */
+         height: 30mm;
+      }
+      /* Center info */
+      .center-info {
+         flex: 1; /* Takes remaining space for b */
+         display: flex;
+         flex-direction: column;
+      }
        .info-line {
            display: flex;
            justify-content: space-between;

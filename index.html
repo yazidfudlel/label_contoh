@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Label Generator A4 x3</title>
+<style>
+
+    body { font-family: Arial, sans-serif; margin: 20px; }
+
+    label { display: block; margin-top: 10px; font-weight: bold; }
+
+    input, select, button { margin-top: 5px; padding: 8px; font-size: 14px; }
+
+    .preview { margin-top: 20px; border: 1px solid #ccc; padding: 10px; }
+
+    .label-page { width: 210mm; height: 297mm; display: flex; flex-direction: column; justify-content: space-between; padding: 10mm; box-sizing: border-box; }
+
+    .label-block { flex: 1; border: 2px solid black; padding: 10px; box-sizing: border-box; margin-bottom: 10px; display: flex; flex-direction: column; justify-content: center; }
+
+    .label-title { font-size: 20pt; font-weight: bold; text-align: center; margin-bottom: 10px; }
+
+    .kv { font-size: 12pt; margin-bottom: 4px; }
+
+    .footer { font-size: 14pt; text-align: center; margin-top: 10px; font-weight: bold; }
+</style>
+</head>
+<body>
+<h2>Label Generator A4 x3</h2>
+<label for="labelCode">Kode Label</label>
+<input type="text" id="labelCode" placeholder="25-TVLB-REC---CDKL---000001" style="width: 100%;">
+<label for="kodeReclass">Kode Reclass</label>
+<select id="kodeReclass">
+<option value="-">-</option>
+<option value="MS">MS</option>
+</select>
+<button onclick="generatePDF()">Generate PDF</button>
+<div class="preview" id="preview"></div>
+<!-- jsPDF CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+
+function parseLabel(raw) {
+
+    let parts = raw.split('---');
+
+    if (parts.length !== 3) return null;
+
+    let head = parts[0].split('-');
+
+    if (head.length !== 3) return null;
+
+    return {
+
+        tahun: head[0],
+
+        origin: head[1],
+
+        kode: head[2],
+
+        grade: parts[1],
+
+        rn: parts[2]
+
+    };
+
+}
+
+function renderLabel(doc, x, y, width, height, data, kodeReclass) {
+
+    doc.setDrawColor(0);
+
+    doc.setLineWidth(1);
+
+    doc.rect(x, y, width, height);
+
+    let centerX = x + width / 2;
+
+    let curY = y + 10;
+
+    doc.setFontSize(20);
+
+    doc.setFont(undefined, "bold");
+
+    doc.text(`${data.full}`, centerX, curY, { align: "center" });
+
+    curY += 12;
+
+    doc.setFontSize(12);
+
+    doc.setFont(undefined, "normal");
+
+    doc.text(`TAHUN : ${data.tahun}`, x + 10, curY); curY += 7;
+
+    doc.text(`ORIGIN : ${data.origin}`, x + 10, curY); curY += 7;
+
+    doc.text(`KODE : ${data.kode}`, x + 10, curY); curY += 7;
+
+    doc.text(`RUNNING NUMBER : ${data.rn}`, x + 10, curY); curY += 7;
+
+    curY += 5;
+
+    doc.text(`TRADER : -    GRADE : ${data.grade}    KODE RECLASS : ${kodeReclass}`, x + 10, curY);
+
+    curY += 10;
+
+    doc.setFontSize(14);
+
+    doc.setFont(undefined, "bold");
+
+    doc.text("APPSHEET SPG CHECK", centerX, curY, { align: "center" });
+
+}
+
+async function generatePDF() {
+
+    const { jsPDF } = window.jspdf;
+
+    let raw = document.getElementById('labelCode').value.trim();
+
+    let kodeReclass = document.getElementById('kodeReclass').value;
+
+    if (!raw) { alert("Masukkan kode label!"); return; }
+
+    let parsed = parseLabel(raw);
+
+    if (!parsed) { alert("Format salah. Contoh: 25-TVLB-REC---CDKL---000001"); return; }
+
+    parsed.full = raw;
+
+    let doc = new jsPDF({ unit: "mm", format: "a4" });
+
+    let margin = 10;
+
+    let labelHeight = (297 - margin * 2 - (2 * 5)) / 3; // 3 label + jarak antar 5mm
+
+    let labelWidth = 210 - margin * 2;
+
+    for (let i = 0; i < 3; i++) {
+
+        let y = margin + i * (labelHeight + 5);
+
+        renderLabel(doc, margin, y, labelWidth, labelHeight, parsed, kodeReclass);
+
+    }
+
+    doc.save(`Label_${raw}.pdf`);
+
+}
+</script>
+</body>
+</html>
+ 

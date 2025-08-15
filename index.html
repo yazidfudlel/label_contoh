@@ -1,152 +1,503 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Label Generator A4 x3</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generator Label QR Code</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
 
-    body { font-family: Arial, sans-serif; margin: 20px; }
+        body {
 
-    label { display: block; margin-top: 10px; font-weight: bold; }
+            font-family: Arial, sans-serif;
 
-    input, select, button { margin-top: 5px; padding: 8px; font-size: 14px; }
+            margin: 20px;
 
-    .preview { margin-top: 20px; border: 1px solid #ccc; padding: 10px; }
+            background-color: #f5f5f5;
 
-    .label-page { width: 210mm; height: 297mm; display: flex; flex-direction: column; justify-content: space-between; padding: 10mm; box-sizing: border-box; }
+        }
 
-    .label-block { flex: 1; border: 2px solid black; padding: 10px; box-sizing: border-box; margin-bottom: 10px; display: flex; flex-direction: column; justify-content: center; }
+```
 
-    .label-title { font-size: 20pt; font-weight: bold; text-align: center; margin-bottom: 10px; }
+    .input-section {
 
-    .kv { font-size: 12pt; margin-bottom: 4px; }
+        background: white;
 
-    .footer { font-size: 14pt; text-align: center; margin-top: 10px; font-weight: bold; }
-</style>
-</head>
-<body>
-<h2>Label Generator A4 x3</h2>
-<label for="labelCode">Kode Label</label>
-<input type="text" id="labelCode" placeholder="25-TVLB-REC---CDKL---000001" style="width: 100%;">
-<label for="kodeReclass">Kode Reclass</label>
-<select id="kodeReclass">
-<option value="-">-</option>
-<option value="MS">MS</option>
-</select>
-<button onclick="generatePDF()">Generate PDF</button>
-<div class="preview" id="preview"></div>
-<!-- jsPDF CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script>
+        padding: 20px;
 
-function parseLabel(raw) {
+        border-radius: 8px;
 
-    let parts = raw.split('---');
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 
-    if (parts.length !== 3) return null;
+        margin-bottom: 20px;
 
-    let head = parts[0].split('-');
-
-    if (head.length !== 3) return null;
-
-    return {
-
-        tahun: head[0],
-
-        origin: head[1],
-
-        kode: head[2],
-
-        grade: parts[1],
-
-        rn: parts[2]
-
-    };
-
-}
-
-function renderLabel(doc, x, y, width, height, data, kodeReclass) {
-
-    doc.setDrawColor(0);
-
-    doc.setLineWidth(1);
-
-    doc.rect(x, y, width, height);
-
-    let centerX = x + width / 2;
-
-    let curY = y + 10;
-
-    doc.setFontSize(20);
-
-    doc.setFont(undefined, "bold");
-
-    doc.text(`${data.full}`, centerX, curY, { align: "center" });
-
-    curY += 12;
-
-    doc.setFontSize(12);
-
-    doc.setFont(undefined, "normal");
-
-    doc.text(`TAHUN : ${data.tahun}`, x + 10, curY); curY += 7;
-
-    doc.text(`ORIGIN : ${data.origin}`, x + 10, curY); curY += 7;
-
-    doc.text(`KODE : ${data.kode}`, x + 10, curY); curY += 7;
-
-    doc.text(`RUNNING NUMBER : ${data.rn}`, x + 10, curY); curY += 7;
-
-    curY += 5;
-
-    doc.text(`TRADER : -    GRADE : ${data.grade}    KODE RECLASS : ${kodeReclass}`, x + 10, curY);
-
-    curY += 10;
-
-    doc.setFontSize(14);
-
-    doc.setFont(undefined, "bold");
-
-    doc.text("APPSHEET SPG CHECK", centerX, curY, { align: "center" });
-
-}
-
-async function generatePDF() {
-
-    const { jsPDF } = window.jspdf;
-
-    let raw = document.getElementById('labelCode').value.trim();
-
-    let kodeReclass = document.getElementById('kodeReclass').value;
-
-    if (!raw) { alert("Masukkan kode label!"); return; }
-
-    let parsed = parseLabel(raw);
-
-    if (!parsed) { alert("Format salah. Contoh: 25-TVLB-REC---CDKL---000001"); return; }
-
-    parsed.full = raw;
-
-    let doc = new jsPDF({ unit: "mm", format: "a4" });
-
-    let margin = 10;
-
-    let labelHeight = (297 - margin * 2 - (2 * 5)) / 3; // 3 label + jarak antar 5mm
-
-    let labelWidth = 210 - margin * 2;
-
-    for (let i = 0; i < 3; i++) {
-
-        let y = margin + i * (labelHeight + 5);
-
-        renderLabel(doc, margin, y, labelWidth, labelHeight, parsed, kodeReclass);
+        max-width: 500px;
 
     }
 
-    doc.save(`Label_${raw}.pdf`);
+    .form-group {
 
-}
+        margin-bottom: 15px;
+
+    }
+
+    label {
+
+        display: block;
+
+        margin-bottom: 5px;
+
+        font-weight: bold;
+
+    }
+
+    input, select {
+
+        width: 100%;
+
+        padding: 8px;
+
+        border: 1px solid #ddd;
+
+        border-radius: 4px;
+
+        box-sizing: border-box;
+
+    }
+
+    button {
+
+        background-color: #007bff;
+
+        color: white;
+
+        padding: 10px 20px;
+
+        border: none;
+
+        border-radius: 4px;
+
+        cursor: pointer;
+
+        margin-right: 10px;
+
+    }
+
+    button:hover {
+
+        background-color: #0056b3;
+
+    }
+
+    .print-area {
+
+        width: 210mm;
+
+        height: 297mm;
+
+        background: white;
+
+        margin: 0 auto;
+
+        padding: 0;
+
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+    }
+
+    .label {
+
+        width: 210mm;
+
+        height: 99mm;
+
+        border: 1px solid #ddd;
+
+        box-sizing: border-box;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        padding: 10mm;
+
+        page-break-inside: avoid;
+
+    }
+
+    .qr-section {
+
+        flex: 0 0 60mm;
+
+        display: flex;
+
+        flex-direction: column;
+
+        align-items: center;
+
+        justify-content: center;
+
+    }
+
+    .qr-code {
+
+        width: 50mm;
+
+        height: 50mm;
+
+        border: 1px solid #000;
+
+    }
+
+    .qr-code canvas {
+
+        width: 100% !important;
+
+        height: 100% !important;
+
+    }
+
+    .info-section {
+
+        flex: 1;
+
+        padding-left: 15mm;
+
+        font-size: 14px;
+
+        line-height: 1.4;
+
+    }
+
+    .label-id {
+
+        font-size: 18px;
+
+        font-weight: bold;
+
+        margin-bottom: 8mm;
+
+        text-align: center;
+
+        border: 2px solid #000;
+
+        padding: 3mm;
+
+    }
+
+    .info-row {
+
+        margin-bottom: 2mm;
+
+        display: flex;
+
+    }
+
+    .info-label {
+
+        font-weight: bold;
+
+        min-width: 40mm;
+
+    }
+
+    .info-value {
+
+        flex: 1;
+
+    }
+
+    .footer-section {
+
+        margin-top: 5mm;
+
+        text-align: center;
+
+        font-size: 12px;
+
+    }
+
+    .appsheet-text {
+
+        font-weight: bold;
+
+        margin-top: 2mm;
+
+    }
+
+    .spg-check {
+
+        margin-top: 1mm;
+
+        font-size: 11px;
+
+    }
+
+    @media print {
+
+        body {
+
+            margin: 0;
+
+            background: white;
+
+        }
+
+        .input-section {
+
+            display: none;
+
+        }
+
+        .print-area {
+
+            box-shadow: none;
+
+            margin: 0;
+
+        }
+
+        .label {
+
+            border: 1px solid #000;
+
+        }
+
+    }
+
+    @page {
+
+        size: A4;
+
+        margin: 0;
+
+    }
+</style>
+
+```
+</head>
+<body>
+<div class="input-section">
+<h2>Generator Label QR Code</h2>
+
+```
+<div class="form-group">
+<label for="labelId">Label ID:</label>
+<input type="text" id="labelId" placeholder="Contoh: 25-TVLB-REC---CDKL---000001" value="25-TVLB-REC---CDKL---000001">
+</div>
+<div class="form-group">
+<label for="kodeReclass">Kode Reclass:</label>
+<select id="kodeReclass">
+<option value="-">- (Tidak ada)</option>
+<option value="MS">MS</option>
+</select>
+</div>
+<button onclick="generateLabels()">Generate Label</button>
+<button onclick="printLabels()">Print</button>
+<button onclick="downloadPDF()">Download PDF</button>
+</div>
+<div class="print-area" id="printArea">
+<!-- Labels akan di-generate di sini -->
+</div>
+<script>
+
+    function parseLabel(labelId) {
+
+        // Parse format: 25-TVLB-REC---CDKL---000001
+
+        const parts = labelId.split('-');
+
+        return {
+
+            tahun: parts[0] || '',
+
+            origin: parts[1] || '',
+
+            kode: parts[2] || '',
+
+            grade: parts[4] || '',
+
+            runningNumber: parts[6] || ''
+
+        };
+
+    }
+
+    function generateQRCode(text, containerId) {
+
+        return new Promise((resolve) => {
+
+            const container = document.getElementById(containerId);
+
+            container.innerHTML = '';
+
+            QRCode.toCanvas(container, text, {
+
+                width: 200,
+
+                height: 200,
+
+                margin: 1,
+
+                color: {
+
+                    dark: '#000000',
+
+                    light: '#FFFFFF'
+
+                }
+
+            }, function (error) {
+
+                if (error) console.error(error);
+
+                resolve();
+
+            });
+
+        });
+
+    }
+
+    async function generateLabels() {
+
+        const labelId = document.getElementById('labelId').value;
+
+        const kodeReclass = document.getElementById('kodeReclass').value;
+
+        if (!labelId) {
+
+            alert('Mohon masukkan Label ID');
+
+            return;
+
+        }
+
+        const parsedLabel = parseLabel(labelId);
+
+        const printArea = document.getElementById('printArea');
+
+        // Generate 3 label yang sama
+
+        let html = '';
+
+        for (let i = 0; i < 3; i++) {
+
+            html += `
+<div class="label">
+<div class="qr-section">
+<div class="qr-code" id="qr-${i}"></div>
+</div>
+<div class="info-section">
+<div class="label-id">${labelId}</div>
+<div class="info-row">
+<span class="info-label">TAHUN :</span>
+<span class="info-value">${parsedLabel.tahun}</span>
+</div>
+<div class="info-row">
+<span class="info-label">ORIGIN :</span>
+<span class="info-value">${parsedLabel.origin}</span>
+</div>
+<div class="info-row">
+<span class="info-label">KODE :</span>
+<span class="info-value">${parsedLabel.kode}</span>
+</div>
+<div class="info-row">
+<span class="info-label">RUNNING NUMBER :</span>
+<span class="info-value">${parsedLabel.runningNumber}</span>
+</div>
+<div class="info-row">
+<span class="info-label">TRADER :</span>
+<span class="info-value">-</span>
+<span class="info-label" style="margin-left: 15mm;">GRADE :</span>
+<span class="info-value">${parsedLabel.grade}</span>
+</div>
+<div class="info-row">
+<span class="info-label">KODE RECLASS :</span>
+<span class="info-value">${kodeReclass}</span>
+</div>
+<div class="footer-section">
+<div class="appsheet-text">APPSHEET</div>
+<div class="spg-check">SPG CHECK</div>
+</div>
+</div>
+</div>
+
+            `;
+
+        }
+
+        printArea.innerHTML = html;
+
+        // Generate QR codes untuk semua label
+
+        for (let i = 0; i < 3; i++) {
+
+            await generateQRCode(labelId, `qr-${i}`);
+
+        }
+
+    }
+
+    function printLabels() {
+
+        const printArea = document.getElementById('printArea');
+
+        if (!printArea.innerHTML.trim()) {
+
+            alert('Mohon generate label terlebih dahulu');
+
+            return;
+
+        }
+
+        window.print();
+
+    }
+
+    function downloadPDF() {
+
+        const printArea = document.getElementById('printArea');
+
+        if (!printArea.innerHTML.trim()) {
+
+            alert('Mohon generate label terlebih dahulu');
+
+            return;
+
+        }
+
+        const opt = {
+
+            margin: 0,
+
+            filename: 'qr-labels.pdf',
+
+            image: { type: 'jpeg', quality: 0.98 },
+
+            html2canvas: { scale: 2, useCORS: true },
+
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+
+        };
+
+        html2pdf().set(opt).from(printArea).save();
+
+    }
+
+    // Generate label default saat halaman dimuat
+
+    window.onload = function() {
+
+        generateLabels();
+
+    };
 </script>
+
+```
 </body>
 </html>
  

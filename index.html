@@ -6,236 +6,253 @@
 <title>Generator Label QR Code</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-.input-section {
-    background: white;
-    padding: 28px 36px;
-    border-radius: 14px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.13);
-    max-width: 750px;
-    margin: 40px auto 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.form-horizontal {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 32px;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-}
-.form-group {
-    display: flex;
-    flex-direction: column;
-    min-width: 220px;
-}
-.form-group label {
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-.form-group input, .form-group select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-.buttons {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 12px;
-}
-button {
-    background-color: #007bff;
-    color: white;
-    padding: 12px 28px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
-button:hover {
-    background-color: #0056b3;
-}
-.app-version {
-    margin-top: 14px;
-    font-size: 14px;
-    color: #888;
-    text-align: center;
-    letter-spacing: 1px;
-}
-.print-area {
-    width: 210mm;
-    height: 297mm;
-    background: white;
-    margin: 20px auto;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-.label {
-    width: 210mm;
-    height: 99mm;
-    border-bottom: 1px dashed #ccc;
-    padding: 10mm;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-.label:last-child {
-    border-bottom: none;
-}
-.label-header {
-    text-align: center;
-    margin-bottom: 7mm;
-}
-.label-id {
-    font-size: 32px;
-    font-weight: bold;
-    letter-spacing: 2px;
-}
-.main-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin: 0 10mm;
-    margin-bottom: 7mm;
-}
-.qr-container {
-    width: 35mm;
-    height: 35mm;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: white;
-    flex: 0 0 35mm;
-}
-.qr-container img {
-    width: 31mm;
-    height: 31mm;
-}
-.center-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5mm;
-    margin-left: 14px;
-    margin-right: 14px;
-}
-.info-line {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2mm;
-}
-.info-label {
-    flex: 1;
-    text-align: right;
-    font-weight: bold;
-    font-size: 15px;
-}
-.info-colon {
-    flex: 0 0 5mm;
-    text-align: center;
-    font-weight: normal;
-    font-size: 15px;
-}
-.info-value {
-    flex: 1;
-    text-align: left;
-    font-weight: normal;
-    font-size: 15px;
-}
-.jumlah-line {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 16px;
-    margin-bottom: 2mm;
-}
-.jumlah-label {
-    flex: 1;
-    text-align: right;
-    font-weight: bold;
-    font-size: 15px;
-}
-.jumlah-colon {
-    flex: 0 0 5mm;
-    text-align: center;
-    font-weight: normal;
-    font-size: 15px;
-}
-.jumlah-value {
-    flex: 1;
-    text-align: left;
-    font-weight: normal;
-    font-size: 15px;
-}
-.bottom-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0 10mm;
-    margin-bottom: 6mm;
-    font-size: 15px;
-    white-space: nowrap;
-}
-.bottom-item {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.bottom-item .info-label {
-    font-weight: bold;
-    margin-right: 3mm;
-}
-.bottom-item .info-value {
-    font-weight: normal;
-}
-.jenis-row {
-    width: 100%;
-    text-align: center;
-    margin: 0 10mm;
-    margin-top: 7mm;
-    margin-bottom: 0;
-    font-weight: bold;
-    font-size: 2.2em;
-    letter-spacing: 2px;
-    color: #007bff;
-}
-@media print {
-    body {
-        background: white;
-        margin: 0;
-    }
-    .input-section {
-        display: none;
-    }
-    .print-area {
-        margin: 0;
-        box-shadow: none;
-    }
-    .label {
-        border-bottom: 1px solid #000;
-        page-break-inside: avoid;
-    }
-    .label:last-child {
-        border-bottom: none;
-    }
-}
-@page {
-    size: A4;
-    margin: 0;
-}
+       * {
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+       }
+       body {
+           font-family: Arial, sans-serif;
+           background-color: #f5f5f5;
+           min-height: 100vh;
+           display: flex;
+           flex-direction: column;
+           justify-content: center;
+           align-items: center;
+       }
+       .input-section {
+           background: white;
+           padding: 24px 32px;
+           border-radius: 12px;
+           box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+           max-width: 700px;
+           margin: 32px auto 0 auto;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+       }
+       .form-horizontal {
+           display: flex;
+           flex-wrap: wrap;
+           gap: 24px;
+           justify-content: center;
+           align-items: center;
+           margin-bottom: 18px;
+       }
+       .form-group {
+           display: flex;
+           flex-direction: column;
+           min-width: 220px;
+       }
+       .form-group label {
+           margin-bottom: 5px;
+           font-weight: bold;
+       }
+       .form-group input, .form-group select {
+           width: 100%;
+           padding: 8px;
+           border: 1px solid #ddd;
+           border-radius: 4px;
+       }
+       .buttons {
+           display: flex;
+           gap: 12px;
+           margin-bottom: 8px;
+       }
+       button {
+           background-color: #007bff;
+           color: white;
+           padding: 10px 22px;
+           border: none;
+           border-radius: 4px;
+           cursor: pointer;
+           font-size: 16px;
+       }
+       button:hover {
+           background-color: #0056b3;
+       }
+       .app-version {
+           margin-top: 10px;
+           font-size: 13px;
+           color: #888;
+           text-align: center;
+           letter-spacing: 1px;
+       }
+       .print-area {
+           width: 210mm;
+           height: 297mm;
+           background: white;
+           margin: 20px auto;
+           box-shadow: 0 0 10px rgba(0,0,0,0.1);
+       }
+       .label {
+           width: 210mm;
+           height: 99mm;
+           border-bottom: 1px dashed #ccc;
+           padding: 10mm;
+           display: flex;
+           flex-direction: column;
+           justify-content: space-between;
+       }
+       .label:last-child {
+           border-bottom: none;
+       }
+       .label-header {
+           text-align: center;
+           margin-bottom: 5mm;
+       }
+       .label-id {
+           font-size: 28px;
+           font-weight: bold;
+           letter-spacing: 2px;
+       }
+       .main-row {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin: 0 10mm;
+         margin-bottom: 5mm;
+      }
+      .qr-container {
+         width: 35mm;
+         height: 35mm;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         background: white;
+         flex: 0 0 35mm;
+      }
+      .qr-container img {
+         width: 30mm;
+         height: 30mm;
+      }
+      .center-info {
+         flex: 1;
+         display: flex;
+         flex-direction: column;
+      }
+       .info-line {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           margin-bottom: 3mm;
+       }
+       .info-label {
+           flex: 1;
+           text-align: right;
+           font-weight: bold;
+           font-size: 14px;
+       }
+       .info-colon {
+           flex: 0 0 5mm;
+           text-align: center;
+           font-weight: normal;
+           font-size: 14px;
+       }
+       .info-value {
+           flex: 1;
+           text-align: left;
+           font-weight: normal;
+           font-size: 14px;
+       }
+       .jumlah-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            margin-bottom: 2mm;
+        }
+        .jumlah-label {
+            flex: 1;
+            text-align: right;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .jumlah-colon {
+            flex: 0 0 5mm;
+            text-align: center;
+            font-weight: normal;
+            font-size: 15px;
+        }
+        .jumlah-value {
+            flex: 1;
+            text-align: left;
+            font-weight: normal;
+            font-size: 15px;
+        }
+       .bottom-row {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           margin: 0 10mm;
+           margin-bottom: 5mm;
+           font-size: 14px;
+           white-space: nowrap;
+       }
+       .bottom-item {
+           flex: 1;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+       }
+       .bottom-item .info-label {
+           font-weight: bold;
+           margin-right: 3mm;
+       }
+       .bottom-item .info-value {
+           font-weight: normal;
+       }
+       .footer-row {
+           display: flex;
+           justify-content: space-between;
+           align-items: center;
+           margin: 0 10mm;
+           font-size: 14px;
+           padding-top: 3mm;
+       }
+       .checkbox-item {
+           flex: 1;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+       }
+       .checkbox {
+           width: 6mm;
+           height: 6mm;
+           border: 2px solid #000;
+           margin-right: 2mm;
+           background: white;
+       }
+       .checkbox-label {
+           font-weight: bold;
+           font-size: 14px;
+       }
+       @media print {
+           body {
+               background: white;
+               margin: 0;
+           }
+           .input-section {
+               display: none;
+           }
+           .print-area {
+               margin: 0;
+               box-shadow: none;
+           }
+           .label {
+               border-bottom: 1px solid #000;
+               page-break-inside: avoid;
+           }
+           .label:last-child {
+               border-bottom: none;
+           }
+       }
+       @page {
+           size: A4;
+           margin: 0;
+       }
 </style>
+
 </head>
 <body>
 <div class="input-section">
@@ -271,7 +288,7 @@ button:hover {
     <button onclick="downloadPDF()">Download PDF</button>
 </div>
 <div class="app-version">
-    Versi App: 1.0.8
+    Versi App: 1.0.9
 </div>
 </div>
 <div class="print-area" id="printArea">
@@ -306,7 +323,9 @@ function setInitialFormValues() {
     const params = getQueryParams();
     if (params.labelId) document.getElementById('labelId').value = params.labelId;
     if (params.kodeReclass) document.getElementById('kodeReclass').value = params.kodeReclass;
+    // Jenis, jika ada param di URL, set ke select
     if (params.jenis) document.getElementById('jenis').value = params.jenis;
+    // Jika tidak ada, biarkan default HTML ("Contoh")
     if (params.jumlah) document.getElementById('jumlah').value = params.jumlah;
 }
 function generateLabels() {
@@ -316,8 +335,11 @@ function generateLabels() {
    const jenisInput = document.getElementById('jenis').value;
    const jumlahInput = document.getElementById('jumlah').value;
 
+   // Pilih sumber value jenis:
    let jenis = jenisInput || params.jenis || "Contoh";
+   // Jika user belum memilih apapun (jenisInput kosong), baru fallback ke param atau default
    let jumlah = jumlahInput || params.jumlah || "";
+
 
    const labelId = labelIdInput || params.labelId;
    const kodeReclass = kodeReclassInput || params.kodeReclass || "-";
@@ -341,59 +363,73 @@ function generateLabels() {
        for (let i = 0; i < 3; i++) {
            html += `
 <div class="label">
-    <div class="label-header">
-        <div class="label-id">${labelId}</div>
-    </div>
-    <div class="main-row">
-        <div class="qr-container">
-            <img src="${qrUrl}" alt="QR Code">
-        </div>
-        <div class="center-info">
-            <div class="info-line">
-                <span class="info-label">TAHUN</span>
-                <span class="info-colon">:</span>
-                <span class="info-value">${parsedLabel.tahun}</span>
-            </div>
-            <div class="info-line">
-                <span class="info-label">ORIGIN</span>
-                <span class="info-colon">:</span>
-                <span class="info-value">${parsedLabel.origin}</span>
-            </div>
-            <div class="info-line">
-                <span class="info-label">KODE</span>
-                <span class="info-colon">:</span>
-                <span class="info-value">${parsedLabel.kode}</span>
-            </div>
-            <div class="info-line">
-                <span class="info-label">RUNNING NUMBER</span>
-                <span class="info-colon">:</span>
-                <span class="info-value">${parsedLabel.runningNumber}</span>
-            </div>
-            <div class="jumlah-line">
-                <span class="jumlah-label">JUMLAH</span>
-                <span class="jumlah-colon">:</span>
-                <span class="jumlah-value">${jumlah || '-'}</span>
-            </div>
-        </div>
-        <div class="qr-container">
-            <img src="${qrUrl}" alt="QR Code">
-        </div>
-    </div>
-    <div class="bottom-row">
-        <div class="bottom-item">
-            <span class="info-label">TRADER :</span>
-            <span class="info-value">-</span>
-        </div>
-        <div class="bottom-item">
-            <span class="info-label">GRADE :</span>
-            <span class="info-value">${parsedLabel.grade}</span>
-        </div>
-        <div class="bottom-item">
-            <span class="info-label">KODE RECLASS :</span>
-            <span class="info-value">${kodeReclass}</span>
-        </div>
-    </div>
-    <div class="jenis-row">[ ${jenis} ]</div>
+<div class="label-header">
+<div class="label-id">${labelId}</div>
+<div style="font-size:20px; font-weight:bold; margin-top:2mm;">(${jenis})</div>
+</div>
+<div class="main-row">
+<div class="qr-container">
+<img src="${qrUrl}" alt="QR Code">
+</div>
+<div class="center-info">
+<div class="info-line">
+<span class="info-label">TAHUN</span>
+<span class="info-colon">:</span>
+<span class="info-value">${parsedLabel.tahun}</span>
+</div>
+<div class="info-line">
+<span class="info-label">ORIGIN</span>
+<span class="info-colon">:</span>
+<span class="info-value">${parsedLabel.origin}</span>
+</div>
+<div class="info-line">
+<span class="info-label">KODE</span>
+<span class="info-colon">:</span>
+<span class="info-value">${parsedLabel.kode}</span>
+</div>
+<div class="info-line">
+<span class="info-label">RUNNING NUMBER</span>
+<span class="info-colon">:</span>
+<span class="info-value">${parsedLabel.runningNumber}</span>
+</div>
+<div class="jumlah-line">
+<span class="jumlah-label">JUMLAH</span>
+<span class="jumlah-colon">:</span>
+<span class="jumlah-value">${jumlah || '-'}</span>
+</div>
+</div>
+<div class="qr-container">
+<img src="${qrUrl}" alt="QR Code">
+</div>
+</div>
+<div class="bottom-row">
+<div class="bottom-item">
+<span class="info-label">TRADER :</span>
+<span class="info-value">-</span>
+</div>
+<div class="bottom-item">
+<span class="info-label">GRADE :</span>
+<span class="info-value">${parsedLabel.grade}</span>
+</div>
+<div class="bottom-item">
+<span class="info-label">KODE RECLASS :</span>
+<span class="info-value">${kodeReclass}</span>
+</div>
+</div>
+<div class="footer-row">
+<div class="checkbox-item">
+<div class="checkbox"></div>
+<span class="checkbox-label">APPSHEET</span>
+</div>
+<div class="checkbox-item">
+<div class="checkbox"></div>
+<span class="checkbox-label">SPG</span>
+</div>
+<div class="checkbox-item">
+<div class="checkbox"></div>
+<span class="checkbox-label">CHECK</span>
+</div>
+</div>
 </div>
            `;
        }
@@ -438,6 +474,7 @@ function downloadPDF() {
    };
    html2pdf().set(opt).from(printArea).save();
 }
+// Saat halaman load, set form value dari param URL jika ada
 window.addEventListener('load', function() {
    setInitialFormValues();
    generateLabels();

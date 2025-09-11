@@ -14,20 +14,37 @@
        body {
            font-family: Arial, sans-serif;
            background-color: #f5f5f5;
+           min-height: 100vh;
+           display: flex;
+           flex-direction: column;
+           justify-content: center;
+           align-items: center;
        }
        .input-section {
            background: white;
-           padding: 20px;
-           margin: 20px;
-           border-radius: 8px;
-           box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-           max-width: 500px;
+           padding: 24px 32px;
+           border-radius: 12px;
+           box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+           max-width: 700px;
+           margin: 32px auto 0 auto;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+       }
+       .form-horizontal {
+           display: flex;
+           flex-wrap: wrap;
+           gap: 24px;
+           justify-content: center;
+           align-items: center;
+           margin-bottom: 18px;
        }
        .form-group {
-           margin-bottom: 15px;
+           display: flex;
+           flex-direction: column;
+           min-width: 220px;
        }
        .form-group label {
-           display: block;
            margin-bottom: 5px;
            font-weight: bold;
        }
@@ -37,20 +54,30 @@
            border: 1px solid #ddd;
            border-radius: 4px;
        }
+       .buttons {
+           display: flex;
+           gap: 12px;
+           margin-bottom: 8px;
+       }
        button {
            background-color: #007bff;
            color: white;
-           padding: 10px 20px;
+           padding: 10px 22px;
            border: none;
            border-radius: 4px;
            cursor: pointer;
-           margin-right: 10px;
-           margin-bottom: 5px;
+           font-size: 16px;
        }
        button:hover {
            background-color: #0056b3;
        }
-       /* Print Area - A4 Size */
+       .app-version {
+           margin-top: 10px;
+           font-size: 13px;
+           color: #888;
+           text-align: center;
+           letter-spacing: 1px;
+       }
        .print-area {
            width: 210mm;
            height: 297mm;
@@ -58,7 +85,6 @@
            margin: 20px auto;
            box-shadow: 0 0 10px rgba(0,0,0,0.1);
        }
-       /* Each label takes 1/3 of A4 height */
        .label {
            width: 210mm;
            height: 99mm;
@@ -71,40 +97,37 @@
        .label:last-child {
            border-bottom: none;
        }
-       /* Label ID centered at top */
        .label-header {
            text-align: center;
            margin-bottom: 5mm;
        }
        .label-id {
-           font-size: 28px; /* Increased from 24px */
+           font-size: 28px;
            font-weight: bold;
            letter-spacing: 2px;
        }
-       /* Main row with QR - Info - QR */
-      .main-row {
+       .main-row {
          display: flex;
          justify-content: space-between;
          align-items: center;
-         margin: 0 10mm; /* Added left and right margins */
+         margin: 0 10mm;
          margin-bottom: 5mm;
       }
       .qr-container {
-         width: 35mm; /* Matches QR width */
+         width: 35mm;
          height: 35mm;
          display: flex;
          align-items: center;
          justify-content: center;
          background: white;
-         flex: 0 0 35mm; /* Fixed width for a and c */
+         flex: 0 0 35mm;
       }
       .qr-container img {
-         width: 30mm; /* Reduced from 35mm */
+         width: 30mm;
          height: 30mm;
       }
-      /* Center info */
       .center-info {
-         flex: 1; /* Takes remaining space for b */
+         flex: 1;
          display: flex;
          flex-direction: column;
       }
@@ -121,7 +144,7 @@
            font-size: 14px;
        }
        .info-colon {
-           flex: 0 0 5mm; /* Width approximates the ":" character */
+           flex: 0 0 5mm;
            text-align: center;
            font-weight: normal;
            font-size: 14px;
@@ -132,12 +155,11 @@
            font-weight: normal;
            font-size: 14px;
        }
-       /* Bottom row: TRADER, GRADE, KODE RECLASS */
        .bottom-row {
            display: flex;
            justify-content: space-between;
            align-items: center;
-           margin: 0 10mm; /* Added left and right margins */
+           margin: 0 10mm;
            margin-bottom: 5mm;
            font-size: 14px;
            white-space: nowrap;
@@ -155,14 +177,12 @@
        .bottom-item .info-value {
            font-weight: normal;
        }
-       /* Footer: Checkboxes with APPSHEET, SPG, CHECK */
        .footer-row {
            display: flex;
            justify-content: space-between;
            align-items: center;
-           margin: 0 10mm; /* Added left and right margins */
+           margin: 0 10mm;
            font-size: 14px;
-           /* border-top: 1px solid #000; */
            padding-top: 3mm;
        }
        .checkbox-item {
@@ -210,29 +230,36 @@
 </head>
 <body>
 <div class="input-section">
-<h2>Generator Label QR Code</h2>
-<div class="form-group">
-<label for="labelId">Label ID:</label>
-<input type="text" id="labelId" placeholder="Contoh: 25-TVLB-REC---CBL---000001">
+<h2 style="margin-bottom: 16px;">Generator Label QR Code</h2>
+<form class="form-horizontal" onsubmit="event.preventDefault(); generateLabels();">
+    <div class="form-group">
+        <label for="labelId">Label ID:</label>
+        <input type="text" id="labelId" placeholder="Contoh: 25-TVLB-REC---CBL---000001">
+    </div>
+    <div class="form-group">
+        <label for="kodeReclass">Kode Reclass:</label>
+        <select id="kodeReclass">
+            <option value="-">-</option>
+            <option value="MS">MS</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="jenis">Jenis:</label>
+        <select id="jenis">
+            <option value="Contoh" selected>Contoh</option>
+            <option value="Master Mapping">Master Mapping</option>
+            <option value="Evaluasi">Evaluasi</option>
+        </select>
+    </div>
+</form>
+<div class="buttons">
+    <button onclick="generateLabels()">Generate Label</button>
+    <button onclick="printLabels()">Print</button>
+    <button onclick="downloadPDF()">Download PDF</button>
 </div>
-<div class="form-group">
-<label for="kodeReclass">Kode Reclass:</label>
-<select id="kodeReclass">
-<option value="-">-</option>
-<option value="MS">MS</option>
-</select>
+<div class="app-version">
+    Versi App: 1.0.5
 </div>
-<div class="form-group">
-<label for="jenis">Jenis:</label>
-<select id="jenis">
-<option value="Contoh">Contoh</option>
-<option value="Master Mapping">Master Mapping</option>
-<option value="Evaluasi">Evaluasi</option>
-</select>
-</div>
-<button onclick="generateLabels()">Generate Label</button>
-<button onclick="printLabels()">Print</button>
-<button onclick="downloadPDF()">Download PDF</button>
 </div>
 <div class="print-area" id="printArea">
 <!-- Labels will be generated here -->
@@ -250,12 +277,12 @@ function parseLabel(labelId) {
        tahun: firstParts[0] || '',
        origin: firstParts[1] || '',
        kode: firstParts[2] || '',
-       grade: mainParts[1] || '', // Middle part after splitting by ---
-       runningNumber: mainParts[2] || '' // Keep as string, no conversion
+       grade: mainParts[1] || '',
+       runningNumber: mainParts[2] || ''
    };
 }
 function generateQRUrl(text) {
-   return `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(text)}&size=120x120`; // Reduced QR size
+   return `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(text)}&size=120x120`;
 }
 function getQueryParams() {
    const params = new URLSearchParams(window.location.search);
@@ -270,11 +297,9 @@ function generateLabels() {
    const kodeReclassInput = document.getElementById('kodeReclass').value;
    const jenisInput = document.getElementById('jenis').value;
    const params = getQueryParams();
-
    const labelId = params.labelId || labelIdInput;
    const kodeReclass = params.kodeReclass || kodeReclassInput;
-   const jenis = params.jenis || jenisInput;
-
+   const jenis = params.jenis || jenisInput || 'Contoh';
    if (!labelId) {
        alert('Mohon masukkan Label ID');
        return;
@@ -283,23 +308,19 @@ function generateLabels() {
        const parsedLabel = parseLabel(labelId);
        const printArea = document.getElementById('printArea');
        const qrUrl = generateQRUrl(labelId);
-
        // Set input fields to reflect URL parameters
        document.getElementById('labelId').value = labelId;
        document.getElementById('kodeReclass').value = kodeReclass;
        document.getElementById('jenis').value = jenis || 'Contoh';
-
        // Generate 3 identical labels
        let html = '';
        for (let i = 0; i < 3; i++) {
            html += `
 <div class="label">
-<!-- Label ID centered -->
 <div class="label-header">
 <div class="label-id">${labelId}</div>
 <div style="font-size:16px; font-weight:bold; margin-top:2mm;">Jenis: ${jenis}</div>
 </div>
-<!-- Main row: QR - Info - QR -->
 <div class="main-row">
 <div class="qr-container">
 <img src="${qrUrl}" alt="QR Code">
@@ -330,7 +351,6 @@ function generateLabels() {
 <img src="${qrUrl}" alt="QR Code">
 </div>
 </div>
-<!-- Bottom row: TRADER, GRADE, KODE RECLASS -->
 <div class="bottom-row">
 <div class="bottom-item">
 <span class="info-label">TRADER :</span>
@@ -345,7 +365,6 @@ function generateLabels() {
 <span class="info-value">${kodeReclass}</span>
 </div>
 </div>
-<!-- Footer: Checkboxes with APPSHEET, SPG, CHECK -->
 <div class="footer-row">
 <div class="checkbox-item">
 <div class="checkbox"></div>
@@ -364,11 +383,10 @@ function generateLabels() {
            `;
        }
        printArea.innerHTML = html;
-       // If URL parameters are present, trigger print preview
        if (params.labelId) {
            setTimeout(() => {
                window.print();
-           }, 1000); // Delay to ensure labels are rendered
+           }, 1000);
        }
    } catch (error) {
        alert('Format Label ID tidak valid. Gunakan format seperti: 25-TVLB-REC---CDKL---000001');
@@ -405,7 +423,6 @@ function downloadPDF() {
    };
    html2pdf().set(opt).from(printArea).save();
 }
-// Generate labels and handle URL parameters on page load
 window.addEventListener('load', function() {
    generateLabels();
 });

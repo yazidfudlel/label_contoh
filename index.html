@@ -222,6 +222,14 @@
 <option value="MS">MS</option>
 </select>
 </div>
+<div class="form-group">
+<label for="jenis">Jenis:</label>
+<select id="jenis">
+<option value="Contoh">Contoh</option>
+<option value="Master Mapping">Master Mapping</option>
+<option value="Evaluasi">Evaluasi</option>
+</select>
+</div>
 <button onclick="generateLabels()">Generate Label</button>
 <button onclick="printLabels()">Print</button>
 <button onclick="downloadPDF()">Download PDF</button>
@@ -253,15 +261,20 @@ function getQueryParams() {
    const params = new URLSearchParams(window.location.search);
    return {
        labelId: params.get('labelId') || '',
-       kodeReclass: params.get('kodeReclass') || '-'
+       kodeReclass: params.get('kodeReclass') || '-',
+       jenis: params.get('jenis') || 'Contoh'
    };
 }
 function generateLabels() {
    const labelIdInput = document.getElementById('labelId').value.trim();
    const kodeReclassInput = document.getElementById('kodeReclass').value;
+   const jenisInput = document.getElementById('jenis').value;
    const params = getQueryParams();
+
    const labelId = params.labelId || labelIdInput;
    const kodeReclass = params.kodeReclass || kodeReclassInput;
+   const jenis = params.jenis || jenisInput;
+
    if (!labelId) {
        alert('Mohon masukkan Label ID');
        return;
@@ -270,9 +283,12 @@ function generateLabels() {
        const parsedLabel = parseLabel(labelId);
        const printArea = document.getElementById('printArea');
        const qrUrl = generateQRUrl(labelId);
+
        // Set input fields to reflect URL parameters
        document.getElementById('labelId').value = labelId;
        document.getElementById('kodeReclass').value = kodeReclass;
+       document.getElementById('jenis').value = jenis || 'Contoh';
+
        // Generate 3 identical labels
        let html = '';
        for (let i = 0; i < 3; i++) {
@@ -281,6 +297,7 @@ function generateLabels() {
 <!-- Label ID centered -->
 <div class="label-header">
 <div class="label-id">${labelId}</div>
+<div style="font-size:16px; font-weight:bold; margin-top:2mm;">Jenis: ${jenis}</div>
 </div>
 <!-- Main row: QR - Info - QR -->
 <div class="main-row">
@@ -395,4 +412,3 @@ window.addEventListener('load', function() {
 </script>
 </body>
 </html>
- 

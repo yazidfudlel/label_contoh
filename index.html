@@ -281,6 +281,10 @@
         <label for="jumlah">Jumlah:</label>
         <input type="number" min="1" id="jumlah" placeholder="Masukkan jumlah (misal: 100)">
     </div>
+    <div class="form-group">
+        <label for="tanggal">Tanggal Beli:</label>
+        <input type="date" id="tanggal" placeholder="DD-MM-YYYY">
+    </div>
 </form>
 <div class="buttons">
     <button onclick="generateLabels()">Generate Label</button>
@@ -316,17 +320,52 @@ function getQueryParams() {
        labelId: params.get('labelId') || '',
        kodeReclass: params.get('kodeReclass') || '-',
        jenis: params.get('jenis') || '',
-       jumlah: params.get('jumlah') || ''
+       jumlah: params.get('jumlah') || '',
+       tanggal: params.get('tanggal') || ''
    };
+}
+function formatDateDisplay(input) {
+    if (!input) return '';
+    // YYYY-MM-DD -> DD-MM-YYYY
+    if (/^\d{4}-\d{2}-\d{2}$/.test(input)) {
+        const [y,m,d] = input.split('-');
+        return `${d}-${m}-${y}`;
+    }
+    // DD-MM-YYYY -> keep
+    if (/^\d{2}-\d{2}-\d{4}$/.test(input)) return input;
+    // try Date parse
+    const dt = new Date(input);
+    if (!isNaN(dt)) {
+        const d = ('0' + dt.getDate()).slice(-2);
+        const m = ('0' + (dt.getMonth() + 1)).slice(-2);
+        const y = dt.getFullYear();
+        return `${d}-${m}-${y}`;
+    }
+    return input;
+}
+function normalizeDateForInput(dateStr) {
+    if (!dateStr) return '';
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+    if (/^\d{2}-\d{2}-\d{4}$/.test(dateStr)) {
+        const [d,m,y] = dateStr.split('-');
+        return `${y}-${m}-${d}`;
+    }
+    const dt = new Date(dateStr);
+    if (!isNaN(dt)) {
+        const y = dt.getFullYear();
+        const m = ('0' + (dt.getMonth() + 1)).slice(-2);
+        const d = ('0' + dt.getDate()).slice(-2);
+        return `${y}-${m}-${d}`;
+    }
+    return '';
 }
 function setInitialFormValues() {
     const params = getQueryParams();
     if (params.labelId) document.getElementById('labelId').value = params.labelId;
     if (params.kodeReclass) document.getElementById('kodeReclass').value = params.kodeReclass;
-    // Jenis, jika ada param di URL, set ke select
     if (params.jenis) document.getElementById('jenis').value = params.jenis;
-    // Jika tidak ada, biarkan default HTML ("Contoh")
     if (params.jumlah) document.getElementById('jumlah').value = params.jumlah;
+    if (params.tanggal) document.getElementById('tanggal').value = normalizeDateForInput(params.tanggal);
 }
 function generateLabels() {
    const params = getQueryParams();
@@ -334,6 +373,7 @@ function generateLabels() {
    const kodeReclassInput = document.getElementById('kodeReclass').value;
    const jenisInput = document.getElementById('jenis').value;
    const jumlahInput = document.getElementById('jumlah').value;
+   const tanggalInput = document.getElementById('tanggal').value; // YYYY-MM-DD from input type=date
 
    // Pilih sumber value jenis:
    let jenis = jenisInput || params.jenis || "Contoh";
@@ -343,6 +383,16 @@ function generateLabels() {
 
    const labelId = labelIdInput || params.labelId;
    const kodeReclass = kodeReclassInput || params.kodeReclass || "-";
+
+   // tanggal: prefer input value (YYYY-MM-DD), fallback to params.tanggal (could be DD-MM-YYYY or YYYY-MM-DD)
+   let tanggal = '';
+   if (tanggalInput) {
+       tanggal = tanggalInput; // keep as YYYY-MM-DD for formatting later
+   } else if (params.tanggal) {
+       // try to normalize param to YYYY-MM-DD for consistent formatting
+       const normalized = normalizeDateForInput(params.tanggal);
+       tanggal = normalized || params.tanggal;
+   }
 
    if (!labelId) {
        alert('Mohon masukkan Label ID');
@@ -358,6 +408,8 @@ function generateLabels() {
        document.getElementById('kodeReclass').value = kodeReclass;
        document.getElementById('jenis').value = jenis;
        document.getElementById('jumlah').value = jumlah;
+       // set tanggal input (normalize to YYYY-MM-DD) so the date picker shows value if possible
+       document.getElementById('tanggal').value = normalizeDateForInput(tanggal);
 
        let html = '';
        for (let i = 0; i < 3; i++) {
@@ -376,6 +428,11 @@ function generateLabels() {
 <span class="info-label">TAHUN</span>
 <span class="info-colon">:</span>
 <span class="info-value">${parsedLabel.tahun}</span>
+</div>
+<div class="info-line">
+<span class="info-label">TGL_BELI</span>
+<span class="info-colon">:</span>
+<span class="info-value">${formatDateDisplay(tanggal) || '-'}</span>
 </div>
 <div class="info-line">
 <span class="info-label">ORIGIN</span>

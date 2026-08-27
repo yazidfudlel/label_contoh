@@ -89,7 +89,7 @@
            width: 210mm;
            height: 99mm;
            border-bottom: 1px dashed #ccc;
-           padding: 10mm;
+           padding: 6mm 10mm 10mm 10mm; /* reduced top padding to decrease space above label id */
            display: flex;
            flex-direction: column;
            justify-content: space-between;
@@ -293,7 +293,7 @@
     <button onclick="downloadPDF()">Download PDF</button>
 </div>
 <div class="app-version">
-    Versi App: 2.0.11
+    Versi App: 2.0.1
 </div>
 </div>
 <div class="print-area" id="printArea">
@@ -367,11 +367,31 @@ function setInitialFormValues() {
     if (params.jenis) document.getElementById('jenis').value = params.jenis;
     if (params.jumlah) document.getElementById('jumlah').value = params.jumlah;
     if (params.tanggal) document.getElementById('tanggal').value = normalizeDateForInput(params.tanggal);
+    // ensure kodeReclass follows jenis logic on init
+    updateKodeReclass();
 }
+
+// otomatis set kodeReclass berdasarkan nilai jenis
+function updateKodeReclass() {
+    const jenis = document.getElementById('jenis').value;
+    const kodeSelect = document.getElementById('kodeReclass');
+    if (jenis === 'Mapping' || jenis === 'Evaluasi') {
+        kodeSelect.value = 'MS';
+    } else {
+        kodeSelect.value = '-';
+    }
+}
+
+// listen for perubahan jenis
+document.addEventListener('DOMContentLoaded', function() {
+    const jenisEl = document.getElementById('jenis');
+    if (jenisEl) jenisEl.addEventListener('change', updateKodeReclass);
+});
+
 function generateLabels() {
    const params = getQueryParams();
    const labelIdInput = document.getElementById('labelId').value.trim();
-   const kodeReclassInput = document.getElementById('kodeReclass').value;
+   // read jenis and jumlah/tanggal from DOM
    const jenisInput = document.getElementById('jenis').value;
    const jumlahInput = document.getElementById('jumlah').value;
    const tanggalInput = document.getElementById('tanggal').value; // YYYY-MM-DD from input type=date
@@ -381,9 +401,11 @@ function generateLabels() {
    // Jika user belum memilih apapun (jenisInput kosong), baru fallback ke param atau default
    let jumlah = jumlahInput || params.jumlah || "";
 
-
    const labelId = labelIdInput || params.labelId;
-   const kodeReclass = kodeReclassInput || params.kodeReclass || "-";
+
+   // otomatiskan kodeReclass berdasarkan jenis (Mapping/Evaluasi => MS, selainnya => '-')
+   let kodeReclass = '-';
+   if (jenis === 'Mapping' || jenis === 'Evaluasi') kodeReclass = 'MS';
 
    // tanggal: prefer input value (YYYY-MM-DD), fallback to params.tanggal (could be DD-MM-YYYY or YYYY-MM-DD)
    let tanggal = '';
